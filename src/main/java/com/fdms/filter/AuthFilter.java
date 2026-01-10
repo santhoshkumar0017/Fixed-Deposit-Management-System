@@ -19,11 +19,11 @@ public class AuthFilter implements Filter {
 
         String path = req.getRequestURI();
 
-        // Allow login without token
-        if (path.endsWith("/login")) {
+        if (path.endsWith("/login") || path.endsWith("/logout")) {
             chain.doFilter(request, response);
             return;
         }
+
 
         // Read token from header
         String token = req.getHeader("Authorization");
