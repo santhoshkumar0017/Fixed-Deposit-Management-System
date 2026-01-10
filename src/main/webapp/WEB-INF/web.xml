@@ -1,0 +1,71 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+  <servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>com.fdms.controller.HelloServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ConfigTestServlet</servlet-name>
+    <servlet-class>com.fdms.controller.ConfigTestServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ConfigTestServlet</servlet-name>
+    <url-pattern>/config-test</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DBTestServlet</servlet-name>
+    <servlet-class>com.fdms.controller.DBTestServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DBTestServlet</servlet-name>
+    <url-pattern>/db-test</url-pattern>
+  </servlet-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.fdms.filter.AuthFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>AdminDashboardServlet</servlet-name>
+    <servlet-class>com.fdms.controller.AdminDashboardServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AdminDashboardServlet</servlet-name>
+    <url-pattern>/admin/dashboard</url-pattern>
+  </servlet-mapping>
+
+
+  <filter>
+    <filter-name>AdminFilter</filter-name>
+    <filter-class>com.fdms.filter.RoleFilter</filter-class>
+    <init-param>
+      <param-name>role</param-name>
+      <param-value>ADMIN</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminFilter</filter-name>
+    <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+
+
+</web-app>
