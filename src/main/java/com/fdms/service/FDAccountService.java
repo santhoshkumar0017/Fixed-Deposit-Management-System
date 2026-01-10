@@ -10,7 +10,7 @@ public class FDAccountService {
 
     private final FDAccountDAO fdAccountDAO = new FDAccountDAO();
 
-    public Long openFD(FDAccount fd) throws Exception {
+    public static Long openFD(FDAccount fd) throws Exception {
 
         // Validation rules
         if (fd.getPrincipalAmount() <= 0) {
@@ -26,15 +26,15 @@ public class FDAccountService {
         }
 
         fd.setStatus("OPEN");
-        return fdAccountDAO.create(fd);
+        return FDAccountDAO.create(fd);
     }
 
     public FDAccount getFDById(Long id) throws Exception {
         return fdAccountDAO.findById(id);
     }
 
-    public List<FDAccount> getFDsByCustomerId(Long customerId) throws Exception {
-        return fdAccountDAO.findByCustomerId(customerId);
+    public static List<FDAccount> getFDsByCustomerId(Long customerId) throws Exception {
+        return FDAccountDAO.findByCustomerId(customerId);
     }
 
     public boolean closeFD(Long id) throws Exception {

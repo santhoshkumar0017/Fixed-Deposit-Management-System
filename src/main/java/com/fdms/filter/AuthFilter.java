@@ -1,19 +1,14 @@
 package com.fdms.filter;
 
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.fdms.service.AuthService;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
 import java.io.IOException;
 
 public class AuthFilter implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) {}
+    private final AuthService authService = new AuthService();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -22,16 +17,33 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        Object user = req.getSession().getAttribute("user");
+        String path = req.getRequestURI();
 
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+        // Allow login without token
+        if (path.endsWith("/login")) {
+            chain.doFilter(request, response);
             return;
+        }
+
+        // Read token from header
+        String token = req.getHeader("Authorization");
+
+        if (token == null || token.isBlank()) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().write("Missing authentication token");
+            return;
+        }
+
+        try {
+            if (!authService.validateToken(token)) {
+                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                resp.getWriter().write("Invalid or expired token");
+                return;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         chain.doFilter(request, response);
     }
-
-    @Override
-    public void destroy() {}
 }

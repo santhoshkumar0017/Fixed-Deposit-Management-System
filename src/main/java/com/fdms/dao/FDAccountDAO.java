@@ -24,7 +24,7 @@ public class FDAccountDAO {
             "UPDATE fd_accounts SET status = ? WHERE id = ?";
 
     // CREATE FD ACCOUNT
-    public Long create(FDAccount fd) throws Exception {
+    public static Long create(FDAccount fd) throws Exception {
         try (Connection conn = DataSourceFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -42,7 +42,7 @@ public class FDAccountDAO {
     }
 
     // READ BY CUSTOMER ID
-    public List<FDAccount> findByCustomerId(Long customerId) throws Exception {
+    public static List<FDAccount> findByCustomerId(Long customerId) throws Exception {
         List<FDAccount> list = new ArrayList<>();
 
         try (Connection conn = DataSourceFactory.getConnection();
@@ -82,7 +82,7 @@ public class FDAccountDAO {
     }
 
     // Map Row → FDAccount
-    private FDAccount mapRow(ResultSet rs) throws Exception {
+    private static FDAccount mapRow(ResultSet rs) throws Exception {
         return new FDAccount(
                 rs.getLong("id"),
                 rs.getLong("customer_id"),

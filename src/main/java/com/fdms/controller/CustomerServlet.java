@@ -5,6 +5,7 @@ import com.fdms.model.Customer;
 import com.fdms.service.CustomerService;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class CustomerServlet extends HttpServlet {
@@ -33,34 +34,43 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        resp.setContentType("application/json");
+        PrintWriter out = resp.getWriter();
+
         try {
             String idParam = req.getParameter("id");
 
-            resp.setContentType("text/plain");
-
-            if (idParam != null) {
-                Customer c = customerService.getCustomerById(Long.parseLong(idParam));
-                if (c != null) {
-                    resp.getWriter().write(
-                            c.getId() + " | " + c.getName() + " | " + c.getPhone() + " | " + c.getEmail()
-                    );
-                } else {
-                    resp.getWriter().write("Customer not found");
-                }
-            } else {
+            if (idParam == null || idParam.isBlank()) {
+                // Fetch all customers
                 List<Customer> list = customerService.getAllCustomers();
-                for (Customer c : list) {
-                    resp.getWriter().write(
-                            c.getId() + " | " + c.getName() + " | " + c.getPhone() + " | " + c.getEmail() + "\n"
-                    );
-                }
+                out.write(new ObjectMapper().writeValueAsString(list));
+                resp.setStatus(HttpServletResponse.SC_OK);
+                return;
             }
 
+            // Single customer fetch
+            long id = Long.parseLong(idParam);
+            Customer customer = customerService.getCustomerById(id);
+
+            if (customer == null) {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.write("{\"error\":\"Customer not found\"}");
+            } else {
+                resp.setStatus(HttpServletResponse.SC_OK);
+                out.write(new ObjectMapper().writeValueAsString(customer));
+            }
+
+        } catch (NumberFormatException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.write("{\"error\":\"Invalid customer ID format\"}");
+
         } catch (Exception e) {
-            resp.setStatus(500);
-            resp.getWriter().write("Error: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.write("{\"error\":\"Internal server error\"}");
         }
     }
+
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {

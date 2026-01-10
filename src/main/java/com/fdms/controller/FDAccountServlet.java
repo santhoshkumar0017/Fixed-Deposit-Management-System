@@ -1,10 +1,14 @@
 package com.fdms.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fdms.model.FDAccount;
 import com.fdms.service.FDAccountService;
 import jakarta.servlet.http.*;
 import jakarta.servlet.*;
 import java.io.IOException;
+import java.util.List;
 
 public class FDAccountServlet extends HttpServlet {
 
@@ -13,48 +17,46 @@ public class FDAccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            FDAccount fd = new FDAccount();
-            fd.setCustomerId(Long.parseLong(req.getParameter("customerId")));
-            fd.setPrincipalAmount(Double.parseDouble(req.getParameter("principalAmount")));
-            fd.setInterestRate(Double.parseDouble(req.getParameter("interestRate")));
-            fd.setStartDate(java.time.LocalDate.parse(req.getParameter("startDate")));
-            fd.setMaturityDate(java.time.LocalDate.parse(req.getParameter("maturityDate")));
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-            Long id = fdService.openFD(fd);
+            FDAccount fd = mapper.readValue(req.getInputStream(), FDAccount.class);
 
-            resp.getWriter().write("FD Opened with ID: " + id);
+            Long id = FDAccountService.openFD(fd);
 
-        } catch (Exception e) {
-            resp.setStatus(400);
-            resp.getWriter().write("Error: " + e.getMessage());
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            resp.setContentType("text/plain");
-
-            if (req.getParameter("id") != null) {
-                FDAccount fd = fdService.getFDById(Long.parseLong(req.getParameter("id")));
-                resp.getWriter().write(fd.toString());
-            }
-            else if (req.getParameter("customerId") != null) {
-                var list = fdService.getFDsByCustomerId(Long.parseLong(req.getParameter("customerId")));
-                list.forEach(fd -> {
-                    try { resp.getWriter().write(fd.toString() + "\n"); }
-                    catch (Exception ignored) {}
-                });
-            }
-            else {
-                resp.getWriter().write("Provide id or customerId");
-            }
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            resp.getWriter().write("FD Account Created with ID: " + id);
 
         } catch (Exception e) {
             resp.setStatus(500);
             resp.getWriter().write("Error: " + e.getMessage());
         }
     }
+
+
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            Long customerId = Long.parseLong(req.getParameter("customerId"));
+
+            List<FDAccount> list = FDAccountService.getFDsByCustomerId(customerId);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule()); // For LocalDate
+
+            String json = mapper.writeValueAsString(list);
+
+            resp.setContentType("application/json");
+            resp.getWriter().write(json);
+
+        } catch (Exception e) {
+            resp.setStatus(500);
+            resp.getWriter().write("Error: " + e.getMessage());
+        }
+    }
+
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {

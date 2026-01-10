@@ -3,30 +3,25 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="
-          http://www.liquibase.org/xml/ns/dbchangelog
-          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
     <changeSet id="003" author="santhosh">
-        <createTable tableName="fd_account">
-
+        <createTable tableName="fd_accounts">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
             <column name="customer_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_fd_customer"
-                             references="customer(id)"/>
+                             references="customers(id)"/>
             </column>
 
-            <column name="deposit_amount" type="DECIMAL(15,2)">
+            <column name="principal_amount" type="DECIMAL(15,2)">
                 <constraints nullable="false"/>
             </column>
 
             <column name="interest_rate" type="DECIMAL(5,2)">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="tenure_months" type="INT">
                 <constraints nullable="false"/>
             </column>
 
@@ -40,9 +35,7 @@
 
             <column name="status" type="VARCHAR(20)" defaultValue="ACTIVE"/>
 
-            <column name="created_at" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
 
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
