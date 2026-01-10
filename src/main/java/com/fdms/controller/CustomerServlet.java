@@ -1,9 +1,9 @@
 package com.fdms.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fdms.model.Customer;
 import com.fdms.service.CustomerService;
 import jakarta.servlet.http.*;
-import jakarta.servlet.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -13,21 +13,23 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("application/json");
+
         try {
-            Customer c = new Customer();
-            c.setName(req.getParameter("name"));
-            c.setPhone(req.getParameter("phone"));
-            c.setEmail(req.getParameter("email"));
+            ObjectMapper mapper = new ObjectMapper();
+            Customer customer = mapper.readValue(req.getInputStream(), Customer.class);
 
-            Long id = customerService.registerCustomer(c);
+            Long id = customerService.registerCustomer(customer);
 
-            resp.getWriter().write("Customer registered with ID: " + id);
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            resp.getWriter().write("{\"message\":\"Customer created\",\"id\":" + id + "}");
 
         } catch (Exception e) {
-            resp.setStatus(400);
-            resp.getWriter().write("Error: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

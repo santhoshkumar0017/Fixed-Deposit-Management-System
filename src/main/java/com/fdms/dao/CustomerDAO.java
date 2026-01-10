@@ -10,7 +10,7 @@ import java.util.List;
 public class CustomerDAO {
 
     private static final String INSERT_SQL =
-            "INSERT INTO customers(name, phone, email) VALUES (?, ?, ?)";
+            "INSERT INTO customers (name, phone, email) VALUES (?, ?, ?)";
 
     private static final String SELECT_BY_ID_SQL =
             "SELECT id, name, phone, email FROM customers WHERE id = ?";
