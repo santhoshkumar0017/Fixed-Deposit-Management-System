@@ -16,6 +16,11 @@ public class AuthService {
     }
 
     public boolean validateToken(String token) {
+
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
         return TokenUtil.isValidToken(token); // You will build this
     }
 }

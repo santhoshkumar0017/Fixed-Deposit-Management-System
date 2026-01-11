@@ -1,6 +1,7 @@
 package com.fdms.dao;
 
 import com.fdms.config.DataSourceFactory;
+import com.fdms.exception.DataException;
 import com.fdms.model.FDAccount;
 
 import java.sql.*;
@@ -39,6 +40,9 @@ public class FDAccountDAO {
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getLong(1) : null;
         }
+        catch (SQLException e) {
+            throw new DataException("Failed to create FDAccount", e);
+        }
     }
 
     // READ BY CUSTOMER ID
@@ -52,6 +56,9 @@ public class FDAccountDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) list.add(mapRow(rs));
+        }
+        catch (SQLException e) {
+            throw new DataException("Failed to fetch all FDAccount", e);
         }
         return list;
     }
@@ -67,6 +74,9 @@ public class FDAccountDAO {
             if (!rs.next()) return null;
             return mapRow(rs);
         }
+        catch (SQLException e) {
+            throw new DataException("Failed to fetch FDAccount", e);
+        }
     }
 
     // UPDATE STATUS (e.g., CLOSED/ACTIVE)
@@ -78,6 +88,9 @@ public class FDAccountDAO {
             ps.setLong(2, id);
 
             return ps.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            throw new DataException("Failed to update the FDAccount", e);
         }
     }
 

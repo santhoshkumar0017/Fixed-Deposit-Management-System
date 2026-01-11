@@ -1,10 +1,12 @@
 package com.fdms.dao;
 
 import com.fdms.config.DataSourceFactory;
+import com.fdms.exception.DataException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AuthDAO {
 
@@ -18,6 +20,8 @@ public class AuthDAO {
 
             ResultSet rs = ps.executeQuery();
             return rs.next() ? rs.getLong("id") : 0L;
+        } catch (SQLException e) {
+            throw new DataException("Login validation failed for user " + username, e);
         }
     }
 
@@ -29,6 +33,8 @@ public class AuthDAO {
             ps.setString(1, token);
             ps.setLong(2, userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataException("Token save failed for customer " + userId, e);
         }
     }
 
@@ -41,6 +47,8 @@ public class AuthDAO {
 
             ResultSet rs = ps.executeQuery();
             return rs.next();
+        } catch (SQLException e) {
+            throw new DataException("Token validation is failed "+e);
         }
     }
 }

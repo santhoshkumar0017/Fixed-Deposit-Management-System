@@ -46,7 +46,7 @@
   <!-- FILTER -->
   <filter>
     <filter-name>AuthFilter</filter-name>
-    <filter-class>com.fdms.filter.AuthFilter</filter-class>
+    <filter-class>com.fdms.util.AuthFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>AuthFilter</filter-name>

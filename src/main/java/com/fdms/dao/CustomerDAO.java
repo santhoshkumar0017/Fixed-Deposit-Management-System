@@ -1,6 +1,7 @@
 package com.fdms.dao;
 
 import com.fdms.config.DataSourceFactory;
+import com.fdms.exception.DataException;
 import com.fdms.model.Customer;
 
 import java.sql.*;
@@ -37,6 +38,9 @@ public class CustomerDAO {
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getLong(1) : null;
         }
+        catch (SQLException e) {
+            throw new DataException("Failed to insert customer", e);
+        }
     }
 
     // READ by ID
@@ -49,6 +53,9 @@ public class CustomerDAO {
 
             if (!rs.next()) return null;
             return mapRow(rs);
+        }
+        catch (SQLException e) {
+            throw new DataException("Failed to fetch customer by id", e);
         }
     }
 
@@ -64,6 +71,10 @@ public class CustomerDAO {
                 list.add(mapRow(rs));
             }
         }
+        catch (SQLException e) {
+        throw new DataException("Failed to fetch customers", e);
+    }
+
 
         return list;
     }
@@ -80,6 +91,9 @@ public class CustomerDAO {
 
             return ps.executeUpdate() > 0;
         }
+        catch (SQLException e) {
+            throw new DataException("Failed to update customer", e);
+        }
     }
 
     // DELETE
@@ -89,6 +103,9 @@ public class CustomerDAO {
 
             ps.setLong(1, id);
             return ps.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            throw new DataException("Failed to delete customer", e);
         }
     }
 
