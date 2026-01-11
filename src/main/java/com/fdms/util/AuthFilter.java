@@ -24,24 +24,20 @@ public class AuthFilter implements Filter {
             return;
         }
 
+        String header = req.getHeader("Authorization");
 
-        // Read token from header
-        String token = req.getHeader("Authorization");
-
-        if (token == null || token.isBlank()) {
+        if (header == null || !header.startsWith("Bearer ")) {
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().write("Missing authentication token");
+            resp.getWriter().write("Missing or invalid Authorization header");
             return;
         }
 
-        try {
-            if (!authService.validateToken(token)) {
-                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                resp.getWriter().write("Invalid or expired token");
-                return;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        String token = header.substring(7); // remove "Bearer "
+
+        if (!authService.validateToken(token)) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().write("Invalid or expired token");
+            return;
         }
 
         chain.doFilter(request, response);

@@ -1,26 +1,40 @@
 package com.fdms.service;
 
+import com.fdms.dao.AuthDAO;
+import com.fdms.exception.DataException;
+import com.fdms.util.PasswordUtil;
 import com.fdms.util.TokenUtil;
 
 public class AuthService {
 
+    private final AuthDAO authDAO = new AuthDAO();
+
     public String login(String username, String password) {
+        try {
+            String hashedPassword = PasswordUtil.hash(password);
+            long userId = authDAO.validateLogin(username, hashedPassword);
 
-        // Hardcoded login check (instead of User table)
-        if (!"admin".equals(username) || !"admin123".equals(password)) {
-            throw new IllegalArgumentException("Bad credentials");
+            if (userId == 0) {
+                throw new IllegalArgumentException("Invalid username or password");
+            }
+
+            String token = TokenUtil.generateToken();
+            authDAO.saveToken(userId, token);
+
+            return token;
+
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DataException("Login failed", e);
         }
-
-        // Generate token
-        return TokenUtil.generateToken(username);
     }
 
     public boolean validateToken(String token) {
-
-        if (token == null || token.isEmpty()) {
-            return false;
+        try {
+            return authDAO.isTokenValid(token);
+        } catch (Exception e) {
+            throw new DataException("Token validation failed", e);
         }
-
-        return TokenUtil.isValidToken(token); // You will build this
     }
 }
