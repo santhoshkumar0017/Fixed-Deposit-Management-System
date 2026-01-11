@@ -1,6 +1,6 @@
 package com.fdms.dao;
 
-import com.fdms.config.DataSourceFactory;
+import com.fdms.config.DatabaseConfig;
 import com.fdms.exception.DataException;
 import com.fdms.model.FDAccount;
 
@@ -26,7 +26,7 @@ public class FDAccountDAO {
 
     // CREATE FD ACCOUNT
     public static Long create(FDAccount fd) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setLong(1, fd.getCustomerId());
@@ -49,7 +49,7 @@ public class FDAccountDAO {
     public static List<FDAccount> findByCustomerId(Long customerId) throws Exception {
         List<FDAccount> list = new ArrayList<>();
 
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_CUSTOMER_SQL)) {
 
             ps.setLong(1, customerId);
@@ -65,7 +65,7 @@ public class FDAccountDAO {
 
     // READ FD BY ID
     public FDAccount findById(Long id) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
 
             ps.setLong(1, id);
@@ -81,7 +81,7 @@ public class FDAccountDAO {
 
     // UPDATE STATUS (e.g., CLOSED/ACTIVE)
     public boolean updateStatus(Long id, String status) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS_SQL)) {
 
             ps.setString(1, status);

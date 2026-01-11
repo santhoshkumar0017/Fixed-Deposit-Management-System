@@ -14,7 +14,7 @@ public class LiquibaseRunner {
         System.out.println("=== Liquibase Migration Started ===");
 
         try {
-            Connection conn = DataSourceFactory.getConnection();
+            Connection conn = DatabaseConfig.getConnect().getConnection();
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(conn));
 

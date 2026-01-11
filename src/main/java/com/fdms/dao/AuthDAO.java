@@ -1,6 +1,6 @@
 package com.fdms.dao;
 
-import com.fdms.config.DataSourceFactory;
+import com.fdms.config.DatabaseConfig;
 import com.fdms.exception.DataException;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ public class AuthDAO {
 
     public Long validateLogin(String username, String passwordHash) throws Exception {
         String sql = "SELECT id FROM users WHERE username = ? AND password_hash = ?";
-        try (Connection con = DataSourceFactory.getConnection();
+        try (Connection con = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, username);
@@ -27,7 +27,7 @@ public class AuthDAO {
 
     public void saveToken(Long userId, String token) throws Exception {
         String sql = "UPDATE users SET token = ? WHERE id = ?";
-        try (Connection con = DataSourceFactory.getConnection();
+        try (Connection con = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, token);
@@ -40,7 +40,7 @@ public class AuthDAO {
 
     public boolean isTokenValid(String token) throws Exception {
         String sql = "SELECT id FROM users WHERE token = ?";
-        try (Connection con = DataSourceFactory.getConnection();
+        try (Connection con = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, token);

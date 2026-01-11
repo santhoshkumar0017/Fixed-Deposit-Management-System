@@ -15,6 +15,12 @@
     <url-pattern>/customer/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>InitServlet</servlet-name>
+    <servlet-class>com.fdms.init.InitServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
   <!-- FD ACCOUNT -->
   <servlet>
     <servlet-name>FDAccountServlet</servlet-name>

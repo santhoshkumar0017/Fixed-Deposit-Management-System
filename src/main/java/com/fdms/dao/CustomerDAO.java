@@ -1,6 +1,7 @@
 package com.fdms.dao;
 
-import com.fdms.config.DataSourceFactory;
+
+import com.fdms.config.DatabaseConfig;
 import com.fdms.exception.DataException;
 import com.fdms.model.Customer;
 
@@ -27,7 +28,7 @@ public class CustomerDAO {
 
     // CREATE
     public Long create(Customer customer) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, customer.getName());
@@ -45,7 +46,7 @@ public class CustomerDAO {
 
     // READ by ID
     public Customer findById(Long id) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
 
             ps.setLong(1, id);
@@ -63,7 +64,7 @@ public class CustomerDAO {
     public List<Customer> findAll() throws Exception {
         List<Customer> list = new ArrayList<>();
 
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
              ResultSet rs = ps.executeQuery()) {
 
@@ -81,7 +82,7 @@ public class CustomerDAO {
 
     // UPDATE
     public boolean update(Customer customer) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn =DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
             ps.setString(1, customer.getName());
@@ -98,7 +99,7 @@ public class CustomerDAO {
 
     // DELETE
     public boolean delete(Long id) throws Exception {
-        try (Connection conn = DataSourceFactory.getConnection();
+        try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
 
             ps.setLong(1, id);

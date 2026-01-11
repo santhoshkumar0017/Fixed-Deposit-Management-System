@@ -12,10 +12,7 @@ public class AppStartupListener implements ServletContextListener {
         System.out.println("=== FDMS Startup: Initializing DataSource and Liquibase ===");
 
         try {
-            // Initialize datasource first
-            DataSourceFactory.getDataSource();
 
-            // Run Liquibase
             LiquibaseRunner.run();
 
             System.out.println("=== Liquibase Migration Completed Successfully ===");
