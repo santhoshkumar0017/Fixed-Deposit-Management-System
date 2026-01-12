@@ -42,14 +42,14 @@ public class CustomerServlet extends HttpServlet {
             String idParam = req.getParameter("id");
 
             if (idParam == null || idParam.isBlank()) {
-                // Fetch all customers
+
                 List<Customer> list = customerService.getAllCustomers();
                 out.write(new ObjectMapper().writeValueAsString(list));
                 resp.setStatus(HttpServletResponse.SC_OK);
                 return;
             }
 
-            // Single customer fetch
+
             long id = Long.parseLong(idParam);
             Customer customer = customerService.getCustomerById(id);
 

@@ -20,7 +20,7 @@ public class AppStartupListener implements ServletContextListener {
         } catch (Exception e) {
             System.err.println("Liquibase failed on startup: " + e.getMessage());
             e.printStackTrace();
-            // IMPORTANT: DO NOT THROW EXCEPTION (prevents Tomcat crash)
+
         }
     }
 

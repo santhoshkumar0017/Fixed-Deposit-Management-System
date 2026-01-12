@@ -26,7 +26,7 @@ public class CustomerDAO {
     private static final String DELETE_SQL =
             "DELETE FROM customers WHERE id = ?";
 
-    // CREATE
+
     public Long create(Customer customer) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -44,7 +44,7 @@ public class CustomerDAO {
         }
     }
 
-    // READ by ID
+
     public Customer findById(Long id) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
@@ -60,7 +60,7 @@ public class CustomerDAO {
         }
     }
 
-    // READ ALL
+
     public List<Customer> findAll() throws Exception {
         List<Customer> list = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class CustomerDAO {
         return list;
     }
 
-    // UPDATE
+
     public boolean update(Customer customer) throws Exception {
         try (Connection conn =DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
@@ -97,7 +97,7 @@ public class CustomerDAO {
         }
     }
 
-    // DELETE
+
     public boolean delete(Long id) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
@@ -110,7 +110,7 @@ public class CustomerDAO {
         }
     }
 
-    // Map DB Row → Customer Object
+
     private Customer mapRow(ResultSet rs) throws Exception {
         return new Customer(
                 rs.getLong("id"),

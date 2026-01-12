@@ -12,7 +12,7 @@ public class FDAccountService {
 
     public static Long openFD(FDAccount fd) throws Exception {
 
-        // Validation rules
+
         if (fd.getPrincipalAmount() <= 0) {
             throw new IllegalArgumentException("Principal amount must be > 0");
         }
@@ -20,7 +20,7 @@ public class FDAccountService {
             throw new IllegalArgumentException("Interest rate must be > 0");
         }
 
-        // Auto-calculate maturity date if not provided
+
         if (fd.getMaturityDate() == null) {
             fd.setMaturityDate(fd.getStartDate().plusMonths(12)); // 1 year default
         }
@@ -41,7 +41,7 @@ public class FDAccountService {
         return fdAccountDAO.updateStatus(id, "CLOSED");
     }
 
-    // Business interest calculation logic
+
     public double calculateMaturityAmount(FDAccount fd) {
         double principal = fd.getPrincipalAmount();
         double rate = fd.getInterestRate() / 100;

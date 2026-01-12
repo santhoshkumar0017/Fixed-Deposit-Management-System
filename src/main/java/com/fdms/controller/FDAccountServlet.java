@@ -44,7 +44,7 @@ public class FDAccountServlet extends HttpServlet {
             List<FDAccount> list = FDAccountService.getFDsByCustomerId(customerId);
 
             ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule()); // For LocalDate
+            mapper.registerModule(new JavaTimeModule());
 
             String json = mapper.writeValueAsString(list);
 

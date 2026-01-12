@@ -24,7 +24,7 @@ public class FDAccountDAO {
     private static final String UPDATE_STATUS_SQL =
             "UPDATE fd_accounts SET status = ? WHERE id = ?";
 
-    // CREATE FD ACCOUNT
+
     public static Long create(FDAccount fd) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -45,7 +45,7 @@ public class FDAccountDAO {
         }
     }
 
-    // READ BY CUSTOMER ID
+
     public static List<FDAccount> findByCustomerId(Long customerId) throws Exception {
         List<FDAccount> list = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class FDAccountDAO {
         return list;
     }
 
-    // READ FD BY ID
+
     public FDAccount findById(Long id) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
@@ -79,7 +79,7 @@ public class FDAccountDAO {
         }
     }
 
-    // UPDATE STATUS (e.g., CLOSED/ACTIVE)
+
     public boolean updateStatus(Long id, String status) throws Exception {
         try (Connection conn = DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS_SQL)) {
@@ -94,7 +94,7 @@ public class FDAccountDAO {
         }
     }
 
-    // Map Row → FDAccount
+
     private static FDAccount mapRow(ResultSet rs) throws Exception {
         return new FDAccount(
                 rs.getLong("id"),

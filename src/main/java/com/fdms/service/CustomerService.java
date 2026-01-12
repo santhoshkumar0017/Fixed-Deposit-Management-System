@@ -9,7 +9,7 @@ public class CustomerService {
     private final CustomerDAO customerDAO = new CustomerDAO();
 
     public Long registerCustomer(Customer customer) throws Exception {
-        // Future business rules: validate email, etc.
+
         if (customer.getName() == null || customer.getName().isBlank()) {
             throw new IllegalArgumentException("Customer name is required");
         }
