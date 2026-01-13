@@ -6,15 +6,19 @@ public class Customer {
     private String name;
     private String phone;
     private String email;
+    private String address;
+    private String aadharNo;
 
     public Customer() {
     }
 
-    public Customer(Long id, String name, String phone, String email) {
+    public Customer(Long id, String name, String phone, String email, String address, String aadharNo) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.address = address;
+        this.aadharNo = aadharNo;
     }
 
     public Long getId() {
@@ -47,5 +51,21 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAadharNo() {
+        return aadharNo;
+    }
+
+    public void setAadharNo(String aadharNo) {
+        this.aadharNo = aadharNo;
     }
 }

@@ -12,16 +12,16 @@ import java.util.List;
 public class CustomerDAO {
 
     private static final String INSERT_SQL =
-            "INSERT INTO customers (name, phone, email) VALUES (?, ?, ?)";
+            "INSERT INTO customers (name, phone, email,address,aadharNo) VALUES (?, ?, ?,?,?)";
 
     private static final String SELECT_BY_ID_SQL =
-            "SELECT id, name, phone, email FROM customers WHERE id = ?";
+            "SELECT id, name, phone, email ,address,aadharNo FROM customers WHERE id = ?";
 
     private static final String SELECT_ALL_SQL =
-            "SELECT id, name, phone, email FROM customers";
+            "SELECT id, name, phone, email , address,aadharNo FROM customers";
 
     private static final String UPDATE_SQL =
-            "UPDATE customers SET name = ?, phone = ?, email = ? WHERE id = ?";
+            "UPDATE customers SET name = ?, phone = ?, email = ?, address=?,aadharNo=? WHERE id = ?";
 
     private static final String DELETE_SQL =
             "DELETE FROM customers WHERE id = ?";
@@ -34,6 +34,9 @@ public class CustomerDAO {
             ps.setString(1, customer.getName());
             ps.setString(2, customer.getPhone());
             ps.setString(3, customer.getEmail());
+            ps.setString(4,customer.getAddress());
+            ps.setString(5,customer.getAadharNo());
+
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -85,10 +88,12 @@ public class CustomerDAO {
         try (Connection conn =DatabaseConfig.getConnect().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
-            ps.setString(1, customer.getName());
-            ps.setString(2, customer.getPhone());
-            ps.setString(3, customer.getEmail());
-            ps.setLong(4, customer.getId());
+            ps.setLong(1,customer.getId());
+            ps.setString(2, customer.getName());
+            ps.setString(3, customer.getPhone());
+            ps.setString(4, customer.getEmail());
+            ps.setString(5,customer.getAddress());
+            ps.setString(6,customer.getAadharNo());
 
             return ps.executeUpdate() > 0;
         }
@@ -116,7 +121,9 @@ public class CustomerDAO {
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("phone"),
-                rs.getString("email")
+                rs.getString("email"),
+                rs.getString("address"),
+                rs.getString("aadharNo")
         );
     }
 }
