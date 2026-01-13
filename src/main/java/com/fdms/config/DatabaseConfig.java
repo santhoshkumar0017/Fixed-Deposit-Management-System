@@ -10,8 +10,6 @@ import java.util.Properties;
 
 public class DatabaseConfig {
 
-    private static HikariDataSource dataSource;
-    private static boolean liquibaseExecuted = false;
     private static final HikariDataSource datasource ;
 
     static {
