@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <JarScanner>
+        <JarScanFilter>
+            <!-- Skip TLD scanning for common non-TLD JARs in your POM -->
+            <JarScanFilter tldSkip="jackson-*.jar, HikariCP*.jar, mysql-connector-java*.jar, liquibase-core*.jar, jBCrypt*.jar, jjwt-*.jar, commons-lang*.jar" />
+        </JarScanFilter>
+    </JarScanner>
+</Context>

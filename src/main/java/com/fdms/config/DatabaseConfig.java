@@ -19,20 +19,20 @@ public class DatabaseConfig {
 
 
             InputStream input=Thread.currentThread().getContextClassLoader()
-                    .getResourceAsStream("application.properties");
+                    .getResourceAsStream("liquibase.properties");
 
 
             if(input==null){
-                throw new DataException("db properties files are not found ");
+                throw new DataException("liquibase properties files are not found ");
             }
 
             props.load(input);
-            Class.forName(props.getProperty("db.DRIVER"));
+            Class.forName(props.getProperty("driver"));
 
             HikariConfig config=new HikariConfig();
-            config.setJdbcUrl(props.getProperty("db.URL"));
-            config.setUsername(props.getProperty("db.USER"));
-            config.setPassword(props.getProperty("db.PASSWORD"));
+            config.setJdbcUrl(props.getProperty("url"));
+            config.setUsername(props.getProperty("username"));
+            config.setPassword(props.getProperty("password"));
 
             config.setMaximumPoolSize(Integer.parseInt(props.getProperty("Hikari.maximumPool")));
             config.setMinimumIdle(Integer.parseInt(props.getProperty("Hikari.minimumIdle")));

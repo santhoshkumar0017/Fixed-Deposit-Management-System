@@ -6,9 +6,9 @@
           http://www.liquibase.org/xml/ns/dbchangelog
           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <include file="db/changeset-001-user.xml"/>
-    <include file="db/changeset-002-customers.xml"/>
-    <include file="db/changeset-003-fd-accounts.xml"/>
+    <include file="src/main/resources/db/changeset-001-user.xml"/>
+    <include file="src/main/resources/db/changeset-002-customers.xml"/>
+    <include file="src/main/resources/db/changeset-003-fd-accounts.xml"/>
 
 
 </databaseChangeLog>
